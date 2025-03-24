@@ -47,7 +47,7 @@ Item PremiumItems[NumSmithItemsHf];
 
 StaticVector<Item, NumHealerItemsHf> HealerItems;
 
-Item WitchItems[NumWitchItemsHf];
+StaticVector<Item, NumWitchItemsHf> WitchItems;
 
 int BoyItemLevel;
 Item BoyItem;
