@@ -40,7 +40,7 @@ int CurrentItemIndex;
 int8_t PlayerItemIndexes[48];
 Item PlayerItems[48];
 
-Item SmithItems[NumSmithBasicItemsHf];
+StaticVector<Item, NumSmithBasicItemsHf> SmithItems;
 int PremiumItemCount;
 int PremiumItemLevel;
 Item PremiumItems[NumSmithItemsHf];

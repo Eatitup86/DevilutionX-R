@@ -14,6 +14,7 @@
 #include "engine/surface.hpp"
 #include "game_mode.hpp"
 #include "utils/attributes.h"
+#include "utils/static_vector.hpp"
 
 namespace devilution {
 
@@ -72,7 +73,7 @@ extern int8_t PlayerItemIndexes[48];
 extern DVL_API_FOR_TEST Item PlayerItems[48];
 
 /** Items sold by Griswold */
-extern DVL_API_FOR_TEST Item SmithItems[NumSmithBasicItemsHf];
+extern DVL_API_FOR_TEST StaticVector<Item, NumSmithBasicItemsHf> SmithItems;
 /** Number of premium items for sale by Griswold */
 extern DVL_API_FOR_TEST int PremiumItemCount;
 /** Base level of current premium items sold by Griswold */

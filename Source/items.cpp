@@ -4404,9 +4404,10 @@ void SpawnSmith(int lvl)
 	}
 
 	int iCnt = RandomIntBetween(10, maxItems);
-	for (int i = 0; i < iCnt; i++) {
-		Item &newItem = SmithItems[i];
+	SmithItems.clear();
 
+	while(SmithItems.size() < iCnt) {
+		Item newItem;
 		do {
 			newItem = {};
 			newItem._iSeed = AdvanceRndSeed();
@@ -4417,11 +4418,11 @@ void SpawnSmith(int lvl)
 
 		newItem._iCreateInfo = lvl | CF_SMITH;
 		newItem._iIdentified = true;
-	}
-	for (int i = iCnt; i < NumSmithBasicItemsHf; i++)
-		SmithItems[i].clear();
 
-	SortVendor(SmithItems + PinnedItemCount, iCnt - PinnedItemCount);
+		SmithItems.push_back(newItem);
+	}
+
+	SortVendor(SmithItems, PinnedItemCount);
 }
 
 void SpawnPremium(const Player &player)
