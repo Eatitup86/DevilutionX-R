@@ -4644,33 +4644,29 @@ void SpawnHealer(int lvl)
 	constexpr size_t PinnedItemCount = NumHealerPinnedItems;
 	constexpr std::array<_item_indexes, PinnedItemCount + 1> PinnedItemTypes = { IDI_HEAL, IDI_FULLHEAL, IDI_RESURRECT };
 	const auto itemCount = static_cast<size_t>(RandomIntBetween(10, gbIsHellfire ? NumHealerItemsHf : NumHealerItems));
+	HealerItems.clear();
 
-	for (size_t i = 0; i < sizeof(HealerItems) / sizeof(HealerItems[0]); ++i) {
-		Item &item = HealerItems[i];
-		item = {};
+	for(int i = 0; i < itemCount; i++) {
+		Item item = {};
 
 		if (i < PinnedItemCount || (gbIsMultiplayer && i < NumHealerPinnedItemsMp)) {
 			item._iSeed = AdvanceRndSeed();
 			GetItemAttrs(item, PinnedItemTypes[i], 1);
 			item._iCreateInfo = lvl;
 			item._iStatFlag = true;
-			continue;
+		} else {
+			item._iSeed = AdvanceRndSeed();
+			SetRndSeed(item._iSeed);
+			_item_indexes itype = RndHealerItem(*MyPlayer, lvl);
+			GetItemAttrs(item, itype, lvl);
+			item._iCreateInfo = lvl | CF_HEALER;
+			item._iIdentified = true;
 		}
 
-		if (i >= itemCount) {
-			item.clear();
-			continue;
-		}
-
-		item._iSeed = AdvanceRndSeed();
-		SetRndSeed(item._iSeed);
-		_item_indexes itype = RndHealerItem(*MyPlayer, lvl);
-		GetItemAttrs(item, itype, lvl);
-		item._iCreateInfo = lvl | CF_HEALER;
-		item._iIdentified = true;
+		HealerItems.push_back(item);
 	}
 
-	SortVendor(HealerItems + PinnedItemCount, itemCount - PinnedItemCount);
+	SortVendor(HealerItems, PinnedItemCount);
 }
 
 void MakeGoldStack(Item &goldItem, int value)

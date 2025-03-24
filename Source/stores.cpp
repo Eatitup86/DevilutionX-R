@@ -45,7 +45,7 @@ int PremiumItemCount;
 int PremiumItemLevel;
 Item PremiumItems[NumSmithItemsHf];
 
-Item HealerItems[20];
+StaticVector<Item, NumHealerItemsHf> HealerItems;
 
 Item WitchItems[NumWitchItemsHf];
 
