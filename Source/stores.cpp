@@ -1405,9 +1405,7 @@ void SmithBuyPItem(Item &item)
 		}
 	}
 
-	PremiumItems[xx].clear();
-	PremiumItemCount--;
-	SpawnPremium(*MyPlayer);
+	ReplacePremium(*MyPlayer, PremiumItems[xx]);
 }
 
 void SmithPremiumBuyEnter()
@@ -2172,6 +2170,7 @@ void SetupTownStores()
 	SpawnWitch(l);
 	SpawnHealer(l);
 	SpawnBoy(myPlayer.getCharacterLevel());
+	// Should not always clear store, since this is called from LoadGameLevel()
 	PremiumItems.clear();
 	SpawnPremium(myPlayer);
 }
