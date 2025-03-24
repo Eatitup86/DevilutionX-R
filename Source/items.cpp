@@ -4429,31 +4429,27 @@ void SpawnPremium(const Player &player)
 {
 	int lvl = player.getCharacterLevel();
 	int maxItems = gbIsHellfire ? NumSmithItemsHf : NumSmithItems;
-	if (PremiumItemCount < maxItems) {
-		for (int i = 0; i < maxItems; i++) {
-			if (PremiumItems[i].isEmpty()) {
-				int plvl = PremiumItemLevel + (gbIsHellfire ? itemLevelAddHf[i] : itemLevelAdd[i]);
-				SpawnOnePremium(PremiumItems[i], plvl, player);
-			}
-		}
-		PremiumItemCount = maxItems;
+
+	while (PremiumItems.size() < maxItems) {
+		int plvl = PremiumItemLevel + (gbIsHellfire ? itemLevelAddHf[PremiumItems.size()] : itemLevelAdd[PremiumItems.size()]);
+		Item item = {};
+		SpawnOnePremium(item, plvl, player);
+		PremiumItems.push_back(item);
 	}
+
 	while (PremiumItemLevel < lvl) {
 		PremiumItemLevel++;
 		if (gbIsHellfire) {
-			// Discard first 3 items and shift next 10
-			std::move(&PremiumItems[3], &PremiumItems[12] + 1, &PremiumItems[0]);
-			SpawnOnePremium(PremiumItems[10], PremiumItemLevel + itemLevelAddHf[10], player);
-			PremiumItems[11] = PremiumItems[13];
-			SpawnOnePremium(PremiumItems[12], PremiumItemLevel + itemLevelAddHf[12], player);
-			PremiumItems[13] = PremiumItems[14];
-			SpawnOnePremium(PremiumItems[14], PremiumItemLevel + itemLevelAddHf[14], player);
+			PremiumItems.erase(PremiumItems.begin(), PremiumItems.begin() + 3);
 		} else {
-			// Discard first 2 items and shift next 3
-			std::move(&PremiumItems[2], &PremiumItems[4] + 1, &PremiumItems[0]);
-			SpawnOnePremium(PremiumItems[3], PremiumItemLevel + itemLevelAdd[3], player);
-			PremiumItems[4] = PremiumItems[5];
-			SpawnOnePremium(PremiumItems[5], PremiumItemLevel + itemLevelAdd[5], player);
+			PremiumItems.erase(PremiumItems.begin(), PremiumItems.begin() + 2);
+		}
+
+		while (PremiumItems.size() < maxItems) {
+			int plvl = PremiumItemLevel + (gbIsHellfire ? itemLevelAddHf[PremiumItems.size()] : itemLevelAdd[PremiumItems.size()]);
+			Item item = {};
+			SpawnOnePremium(item, plvl, player);
+			PremiumItems.push_back(item);
 		}
 	}
 }

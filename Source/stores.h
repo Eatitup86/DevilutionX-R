@@ -79,7 +79,7 @@ extern DVL_API_FOR_TEST int PremiumItemCount;
 /** Base level of current premium items sold by Griswold */
 extern DVL_API_FOR_TEST int PremiumItemLevel;
 /** Premium items sold by Griswold */
-extern DVL_API_FOR_TEST Item PremiumItems[NumSmithItemsHf];
+extern DVL_API_FOR_TEST StaticVector<Item, NumSmithItemsHf> PremiumItems;
 
 /** Items sold by Pepin */
 extern DVL_API_FOR_TEST StaticVector<Item, NumHealerItemsHf> HealerItems;

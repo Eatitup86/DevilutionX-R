@@ -43,7 +43,7 @@ Item PlayerItems[48];
 StaticVector<Item, NumSmithBasicItemsHf> SmithItems;
 int PremiumItemCount;
 int PremiumItemLevel;
-Item PremiumItems[NumSmithItemsHf];
+StaticVector<Item, NumSmithItemsHf> PremiumItems;
 
 StaticVector<Item, NumHealerItemsHf> HealerItems;
 
@@ -2172,6 +2172,7 @@ void SetupTownStores()
 	SpawnWitch(l);
 	SpawnHealer(l);
 	SpawnBoy(myPlayer.getCharacterLevel());
+	PremiumItems.clear();
 	SpawnPremium(myPlayer);
 }
 
