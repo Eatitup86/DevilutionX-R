@@ -2145,8 +2145,10 @@ void InitStores()
 	PremiumItemCount = 0;
 	PremiumItemLevel = 1;
 
-	for (auto &premiumitem : PremiumItems)
-		premiumitem.clear();
+	SmithItems.clear();
+	WitchItems.clear();
+	HealerItems.clear();
+	PremiumItems.clear();
 
 	BoyItem.clear();
 	BoyItemLevel = 0;
@@ -2170,8 +2172,6 @@ void SetupTownStores()
 	SpawnWitch(l);
 	SpawnHealer(l);
 	SpawnBoy(myPlayer.getCharacterLevel());
-	// Should not always clear store, since this is called from LoadGameLevel()
-	PremiumItems.clear();
 	SpawnPremium(myPlayer);
 }
 
