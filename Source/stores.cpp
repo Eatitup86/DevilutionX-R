@@ -1306,14 +1306,7 @@ void SmithBuyItem(Item &item)
 		item._iIdentified = false;
 	StoreAutoPlace(item, true);
 	int idx = OldScrollPos + ((OldTextLine - PreviousScrollPos) / 4);
-	if (idx == NumSmithBasicItemsHf - 1) {
-		SmithItems[NumSmithBasicItemsHf - 1].clear();
-	} else {
-		for (; !SmithItems[idx + 1].isEmpty(); idx++) {
-			SmithItems[idx] = std::move(SmithItems[idx + 1]);
-		}
-		SmithItems[idx].clear();
-	}
+	SmithItems.erase(SmithItems.begin() + idx);
 	CalcPlrInv(*MyPlayer, true);
 }
 
@@ -1355,15 +1348,7 @@ void SmithBuyPItem(Item &item)
 	StoreAutoPlace(item, true);
 
 	int idx = OldScrollPos + ((OldTextLine - PreviousScrollPos) / 4);
-	int xx = 0;
-	for (int i = 0; idx >= 0; i++) {
-		if (!PremiumItems[i].isEmpty()) {
-			idx--;
-			xx = i;
-		}
-	}
-
-	ReplacePremium(*MyPlayer, PremiumItems[xx]);
+	ReplacePremium(*MyPlayer, PremiumItems[idx]);
 }
 
 void SmithPremiumBuyEnter()
@@ -1549,14 +1534,7 @@ void WitchBuyItem(Item &item)
 	StoreAutoPlace(item, true);
 
 	if (idx >= 3) {
-		if (idx == NumWitchItemsHf - 1) {
-			WitchItems[NumWitchItemsHf - 1].clear();
-		} else {
-			for (; !WitchItems[idx + 1].isEmpty(); idx++) {
-				WitchItems[idx] = std::move(WitchItems[idx + 1]);
-			}
-			WitchItems[idx].clear();
-		}
+		WitchItems.erase(WitchItems.begin() + idx);
 	}
 
 	CalcPlrInv(*MyPlayer, true);
@@ -1722,14 +1700,7 @@ void HealerBuyItem(Item &item)
 			return;
 	}
 	idx = OldScrollPos + ((OldTextLine - PreviousScrollPos) / 4);
-	if (idx == 19) {
-		HealerItems[19].clear();
-	} else {
-		for (; !HealerItems[idx + 1].isEmpty(); idx++) {
-			HealerItems[idx] = std::move(HealerItems[idx + 1]);
-		}
-		HealerItems[idx].clear();
-	}
+	HealerItems.erase(HealerItems.begin() + idx);
 	CalcPlrInv(*MyPlayer, true);
 }
 
