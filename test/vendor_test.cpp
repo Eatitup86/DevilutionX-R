@@ -181,9 +181,7 @@ TEST_F(VendorTest, SmithGen)
 	MyPlayer->setCharacterLevel(25);
 
 	// Clear global state for test, and force Diablo game mode
-	for (int i = 0; i < NumSmithBasicItemsHf; i++) {
-		SmithItems[i].clear();
-	}
+	SmithItems.clear();
 	gbIsHellfire = false;
 
 	SetRndSeed(SEED);
@@ -191,14 +189,11 @@ TEST_F(VendorTest, SmithGen)
 
 	SetRndSeed(SEED);
 	const int N_ITEMS = RandomIntBetween(10, NumSmithBasicItems);
-	int n_items = 0;
 
-	for (int i = 0; i < NumSmithBasicItems; i++) {
-		if (SmithItems[i].isEmpty()) break;
+	for (size_t i = 0; i < SmithItems.size(); i++) {
 		EXPECT_THAT(SmithItems[i]._itype, SmithTypeMatch(i));
-		n_items++;
 	}
-	EXPECT_EQ(n_items, N_ITEMS);
+	EXPECT_EQ(SmithItems.size(), N_ITEMS);
 }
 
 TEST_F(VendorTest, SmithGenHf)
@@ -211,9 +206,7 @@ TEST_F(VendorTest, SmithGenHf)
 	MyPlayer->setCharacterLevel(25);
 
 	// Clear global state for test, and force Hellfire game mode
-	for (int i = 0; i < NumSmithBasicItemsHf; i++) {
-		SmithItems[i].clear();
-	}
+	SmithItems.clear();
 	gbIsHellfire = true;
 
 	SetRndSeed(SEED);
@@ -221,14 +214,11 @@ TEST_F(VendorTest, SmithGenHf)
 
 	SetRndSeed(SEED);
 	const int N_ITEMS = RandomIntBetween(10, NumSmithBasicItemsHf);
-	int n_items = 0;
 
-	for (int i = 0; i < NumSmithBasicItemsHf; i++) {
-		if (SmithItems[i].isEmpty()) break;
+	for (size_t i = 0; i < SmithItems.size(); i++) {
 		EXPECT_THAT(SmithItems[i]._itype, SmithTypeMatchHf(i));
-		n_items++;
 	}
-	EXPECT_EQ(n_items, N_ITEMS);
+	EXPECT_EQ(SmithItems.size(), N_ITEMS);
 }
 
 TEST_F(VendorTest, PremiumQlvl)
@@ -239,9 +229,7 @@ TEST_F(VendorTest, PremiumQlvl)
 	int plvl = 1;
 
 	// Clear global state for test, and force Diablo game mode
-	for (int i = 0; i < NumSmithItems; i++) {
-		PremiumItems[i].clear();
-	}
+	PremiumItems.clear();
 	PremiumItemLevel = 1;
 	gbIsHellfire = false;
 
@@ -265,9 +253,7 @@ TEST_F(VendorTest, PremiumQlvl)
 	}
 
 	// Clear global state
-	for (int i = 0; i < NumSmithItems; i++) {
-		PremiumItems[i].clear();
-	}
+	PremiumItems.clear();
 	PremiumItemLevel = 1;
 
 	// Test starting game as a level 25 character
@@ -284,11 +270,9 @@ TEST_F(VendorTest, PremiumQlvl)
 	qlvls[3] = 0;
 	qlvls[5] = 0;
 
-	PremiumItems[0].clear();
-	PremiumItems[3].clear();
-	PremiumItems[5].clear();
-	PremiumItemCount -= 3;
-	SpawnPremium(*MyPlayer);
+	ReplacePremium(*MyPlayer, PremiumItems[0]);
+	ReplacePremium(*MyPlayer, PremiumItems[3]);
+	ReplacePremium(*MyPlayer, PremiumItems[5]);
 	test_premium_qlvl(qlvls, NumSmithItems, MyPlayer->getCharacterLevel(), plvl, gbIsHellfire);
 	for (int i = 0; i < NumSmithItems; i++) {
 		EXPECT_EQ(PremiumItems[i]._iCreateInfo & CF_LEVEL, qlvls[i]) << "Index: " << i;
@@ -306,9 +290,7 @@ TEST_F(VendorTest, PremiumQlvlHf)
 	int plvl = 1;
 
 	// Clear global state for test, and force Hellfire game mode
-	for (int i = 0; i < NumSmithItemsHf; i++) {
-		PremiumItems[i].clear();
-	}
+	PremiumItems.clear();
 	PremiumItemLevel = 1;
 	gbIsHellfire = true;
 
@@ -332,9 +314,7 @@ TEST_F(VendorTest, PremiumQlvlHf)
 	}
 
 	// Clear global state
-	for (int i = 0; i < NumSmithItemsHf; i++) {
-		PremiumItems[i].clear();
-	}
+	PremiumItems.clear();
 	PremiumItemLevel = 1;
 
 	// Test starting game as a level 25 character
@@ -350,11 +330,10 @@ TEST_F(VendorTest, PremiumQlvlHf)
 	qlvls[0] = 0;
 	qlvls[7] = 0;
 	qlvls[14] = 0;
-	PremiumItems[0].clear();
-	PremiumItems[7].clear();
-	PremiumItems[14].clear();
-	PremiumItemCount -= 3;
-	SpawnPremium(*MyPlayer);
+
+	ReplacePremium(*MyPlayer, PremiumItems[0]);
+	ReplacePremium(*MyPlayer, PremiumItems[7]);
+	ReplacePremium(*MyPlayer, PremiumItems[14]);
 	test_premium_qlvl(qlvls, NumSmithItemsHf, MyPlayer->getCharacterLevel(), plvl, gbIsHellfire);
 	for (int i = 0; i < NumSmithItemsHf; i++) {
 		EXPECT_EQ(PremiumItems[i]._iCreateInfo & CF_LEVEL, qlvls[i]) << "Index: " << i;
@@ -372,9 +351,7 @@ TEST_F(VendorTest, WitchGen)
 	MyPlayer->setCharacterLevel(25);
 
 	// Clear global state for test, and force Diablo game mode
-	for (int i = 0; i < NumWitchItemsHf; i++) {
-		WitchItems[i].clear();
-	}
+	WitchItems.clear();
 	gbIsHellfire = false;
 
 	SetRndSeed(SEED);
@@ -383,22 +360,18 @@ TEST_F(VendorTest, WitchGen)
 	SetRndSeed(SEED);
 	const int N_ITEMS = RandomIntBetween(10, NumWitchItems);
 
-	int n_items = NumWitchPinnedItems;
-
 	for (int i = 0; i < NumWitchPinnedItems; i++) {
 		EXPECT_EQ(WitchItems[i].IDidx, PINNED_ITEMS[i]) << "Index: " << i;
 	}
 
-	for (int i = NumWitchPinnedItems; i < NumWitchItems; i++) {
-		if (WitchItems[i].isEmpty()) break;
+	for (size_t i = NumWitchPinnedItems; i < WitchItems.size(); i++) {
 		EXPECT_THAT(WitchItems[i]._itype, WitchTypeMatch(i));
 
 		if (WitchItems[i]._itype == ItemType::Misc) {
 			EXPECT_THAT(WitchItems[i]._iMiscId, WitchMiscMatch(i));
 		}
-		n_items++;
 	}
-	EXPECT_EQ(n_items, N_ITEMS);
+	EXPECT_EQ(WitchItems.size(), N_ITEMS);
 }
 
 TEST_F(VendorTest, WitchGenHf)
@@ -413,9 +386,7 @@ TEST_F(VendorTest, WitchGenHf)
 	CreatePlayer(*MyPlayer, HeroClass::Warrior);
 
 	// Clear global state for test, and force Hellfire game mode
-	for (int i = 0; i < NumWitchItemsHf; i++) {
-		WitchItems[i].clear();
-	}
+	WitchItems.clear();
 	gbIsHellfire = true;
 
 	SetRndSeed(SEED);
@@ -426,24 +397,21 @@ TEST_F(VendorTest, WitchGenHf)
 	const int N_ITEMS = RandomIntBetween(10, NumWitchItemsHf);
 
 	int n_books = 0;
-	int n_items = NumWitchPinnedItems;
 
 	for (int i = 0; i < NumWitchPinnedItems; i++) {
 		EXPECT_EQ(WitchItems[i].IDidx, PINNED_ITEMS[i]) << "Index: " << i;
 	}
 
-	for (int i = NumWitchPinnedItems; i < NumWitchItemsHf; i++) {
-		if (WitchItems[i].isEmpty()) break;
+	for (size_t i = NumWitchPinnedItems; i < WitchItems.size(); i++) {
 		EXPECT_THAT(WitchItems[i]._itype, WitchTypeMatch(i));
 
 		if (WitchItems[i]._itype == ItemType::Misc) {
 			EXPECT_THAT(WitchItems[i]._iMiscId, WitchMiscMatch(i));
 		}
 		if (WitchItems[i]._iMiscId == IMISC_BOOK) n_books++;
-		n_items++;
 	}
 	EXPECT_GE(n_books, N_PINNED_BOOKS);
-	EXPECT_EQ(n_items, N_ITEMS);
+	EXPECT_EQ(WitchItems.size(), N_ITEMS);
 }
 
 TEST_F(VendorTest, HealerGen)
@@ -456,9 +424,7 @@ TEST_F(VendorTest, HealerGen)
 	MyPlayer->setCharacterLevel(25);
 
 	// Clear global state for test, and force Diablo game mode
-	for (int i = 0; i < NumHealerItemsHf; i++) {
-		HealerItems[i].clear();
-	}
+	HealerItems.clear();
 	gbIsHellfire = false;
 
 	SetRndSeed(SEED);
@@ -466,19 +432,16 @@ TEST_F(VendorTest, HealerGen)
 
 	SetRndSeed(SEED);
 	const int N_ITEMS = RandomIntBetween(10, NumHealerItems);
-	int n_items = NumHealerPinnedItems;
 
 	for (int i = 0; i < NumHealerPinnedItems; i++) {
 		EXPECT_EQ(HealerItems[i].IDidx, PINNED_ITEMS[i]) << "Index: " << i;
 	}
 
-	for (int i = NumHealerPinnedItems; i < NumHealerItems; i++) {
-		if (HealerItems[i].isEmpty()) break;
+	for (size_t i = NumHealerPinnedItems; i < HealerItems.size(); i++) {
 		EXPECT_THAT(HealerItems[i]._itype, Eq(ItemType::Misc));
 		EXPECT_THAT(HealerItems[i]._iMiscId, HealerMiscMatch(i));
-		n_items++;
 	}
-	EXPECT_EQ(n_items, N_ITEMS);
+	EXPECT_EQ(HealerItems.size(), N_ITEMS);
 }
 
 TEST_F(VendorTest, HealerGenHf)
@@ -493,9 +456,7 @@ TEST_F(VendorTest, HealerGenHf)
 	MyPlayer->setCharacterLevel(25);
 
 	// Clear global state for test, and force Hellfire game mode
-	for (int i = 0; i < NumHealerItemsHf; i++) {
-		HealerItems[i].clear();
-	}
+	HealerItems.clear();
 	gbIsHellfire = true;
 
 	SetRndSeed(SEED);
@@ -503,19 +464,16 @@ TEST_F(VendorTest, HealerGenHf)
 
 	SetRndSeed(SEED);
 	const int N_ITEMS = RandomIntBetween(10, NumHealerItemsHf);
-	int n_items = NumHealerPinnedItems;
 
 	for (int i = 0; i < NumHealerPinnedItems; i++) {
 		EXPECT_EQ(HealerItems[i].IDidx, PINNED_ITEMS[i]) << "Index: " << i;
 	}
 
-	for (int i = NumHealerPinnedItems; i < NumHealerItemsHf; i++) {
-		if (HealerItems[i].isEmpty()) break;
+	for (size_t i = NumHealerPinnedItems; i < HealerItems.size(); i++) {
 		EXPECT_THAT(HealerItems[i]._itype, Eq(ItemType::Misc));
 		EXPECT_THAT(HealerItems[i]._iMiscId, HealerMiscMatch(i));
-		n_items++;
 	}
-	EXPECT_EQ(n_items, N_ITEMS);
+	EXPECT_EQ(HealerItems.size(), N_ITEMS);
 }
 
 } // namespace
