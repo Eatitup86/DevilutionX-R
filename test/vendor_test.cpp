@@ -270,9 +270,9 @@ TEST_F(VendorTest, PremiumQlvl)
 	qlvls[3] = 0;
 	qlvls[5] = 0;
 
-	ReplacePremium(*MyPlayer, PremiumItems[0]);
-	ReplacePremium(*MyPlayer, PremiumItems[3]);
-	ReplacePremium(*MyPlayer, PremiumItems[5]);
+	ReplacePremium(*MyPlayer, 0);
+	ReplacePremium(*MyPlayer, 3);
+	ReplacePremium(*MyPlayer, 5);
 	test_premium_qlvl(qlvls, NumSmithItems, MyPlayer->getCharacterLevel(), plvl, gbIsHellfire);
 	for (int i = 0; i < NumSmithItems; i++) {
 		EXPECT_EQ(PremiumItems[i]._iCreateInfo & CF_LEVEL, qlvls[i]) << "Index: " << i;
@@ -331,9 +331,9 @@ TEST_F(VendorTest, PremiumQlvlHf)
 	qlvls[7] = 0;
 	qlvls[14] = 0;
 
-	ReplacePremium(*MyPlayer, PremiumItems[0]);
-	ReplacePremium(*MyPlayer, PremiumItems[7]);
-	ReplacePremium(*MyPlayer, PremiumItems[14]);
+	ReplacePremium(*MyPlayer, 0);
+	ReplacePremium(*MyPlayer, 7);
+	ReplacePremium(*MyPlayer, 14);
 	test_premium_qlvl(qlvls, NumSmithItemsHf, MyPlayer->getCharacterLevel(), plvl, gbIsHellfire);
 	for (int i = 0; i < NumSmithItemsHf; i++) {
 		EXPECT_EQ(PremiumItems[i]._iCreateInfo & CF_LEVEL, qlvls[i]) << "Index: " << i;
