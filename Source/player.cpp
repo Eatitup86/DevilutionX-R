@@ -2884,10 +2884,7 @@ void RestartTownLvl(Player &player)
 	player._pManaBase = player._pMana - (player._pMaxMana - player._pMaxManaBase);
 
 	CalcPlrInv(player, false);
-
-	if ((player._pHitPoints >> 6) <= 0)
-		SetPlayerHitPoints(player, 1 << 6);
-
+	SetPlayerHitPoints(player, 1 << 6);
 	player._pmode = PM_NEWLVL;
 
 	if (&player == MyPlayer) {
