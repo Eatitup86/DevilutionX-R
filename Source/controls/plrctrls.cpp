@@ -70,6 +70,13 @@ bool InGameMenu()
 	    || (MyPlayer != nullptr && MyPlayer->_pInvincible && MyPlayer->_pHitPoints == 0);
 }
 
+static AimState gAimState;
+
+AimState &GetAimState()
+{
+	return gAimState;
+}
+
 namespace {
 
 int Slot = SLOTXY_INV_FIRST;
@@ -129,7 +136,8 @@ int GetDistance(Point destination, int maxDistance)
 
 	int8_t walkpath[MaxPathLengthPlayer];
 	Player &myPlayer = *MyPlayer;
-	const int steps = FindPath(CanStep, [&myPlayer](Point position) { return PosOkPlayer(myPlayer, position); }, myPlayer.position.future, destination, walkpath, std::min<size_t>(maxDistance, MaxPathLengthPlayer));
+	const int steps = FindPath(
+	    CanStep, [&myPlayer](Point position) { return PosOkPlayer(myPlayer, position); }, myPlayer.position.future, destination, walkpath, std::min<size_t>(maxDistance, MaxPathLengthPlayer));
 	if (steps > maxDistance)
 		return 0;
 
@@ -1445,6 +1453,12 @@ void WalkInDir(Player &player, AxisDirection dir)
 		return;
 	}
 
+	if (IsPointAndClick()) {
+		SetPointAndClick(false);
+		if (ControlMode == ControlTypes::KeyboardAndMouse)
+			ControlMode = ControlTypes::Gamepad;
+	}
+
 	const Direction pdir = FaceDir[static_cast<std::size_t>(dir.x)][static_cast<std::size_t>(dir.y)];
 	const auto delta = player.position.future + pdir;
 
@@ -1860,9 +1874,8 @@ void HandleRightStickMotion()
 		if (now - lastMouseSetTick > 0) {
 			ResetCursor();
 			SetCursorPos({ x, y });
-			LogControlDeviceAndModeChange(ControlDevice, ControlTypes::KeyboardAndMouse);
-
 			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true);
 			lastMouseSetTick = now;
 		}
 	}
@@ -2107,7 +2120,9 @@ void PerformSpellAction()
 		return;
 	}
 
-	UpdateSpellTarget(myPlayer._pRSpell);
+	if (ControlMode != ControlTypes::KeyboardAndMouse && !IsPointAndClick()) {
+		UpdateSpellTarget(myPlayer._pRSpell);
+	}
 	CheckPlrSpell(false);
 	if (PlayerUnderCursor != nullptr)
 		LastPlayerAction = PlayerActionType::SpellPlayerTarget;
@@ -2190,6 +2205,20 @@ void PerformSecondaryAction()
 
 	if (!MyPlayer->HoldItem.isEmpty() && !TryDropItem())
 		return;
+
+	if (pcurs == CURSOR_TELEKINESIS
+	    || pcurs == CURSOR_IDENTIFY
+	    || pcurs == CURSOR_REPAIR
+	    || pcurs == CURSOR_RECHARGE
+	    || pcurs == CURSOR_DISARM
+	    || pcurs == CURSOR_OIL
+	    || pcurs == CURSOR_RESURRECT
+	    || pcurs == CURSOR_TELEPORT
+	    || pcurs == CURSOR_HEALOTHER) {
+		TryIconCurs();
+		return;
+	}
+
 	if (pcurs > CURSOR_HAND)
 		NewCursor(CURSOR_HAND);
 
@@ -2219,12 +2248,31 @@ void QuickCast(size_t slot)
 	const SpellID spell = myPlayer._pSplHotKey[slot];
 	const SpellType spellType = myPlayer._pSplTHotKey[slot];
 
-	if (ControlMode != ControlTypes::KeyboardAndMouse) {
+	if (ControlMode != ControlTypes::KeyboardAndMouse && !IsPointAndClick()) {
 		UpdateSpellTarget(spell);
 	}
 
 	CheckPlrSpell(false, spell, spellType);
 	LastPlayerAction = prevMouseButtonAction;
+}
+
+void GamepadAim(int dx, int dy)
+{
+	auto &a = GetAimState();
+
+	if (dx == 0 && dy == 0)
+		return;
+
+	if (!a.active) {
+		a.active = true;
+		a.screen = MousePosition;
+	}
+
+	const int stepX = (std::max)(1, TILE_WIDTH);
+	const int stepY = (std::max)(1, TILE_HEIGHT);
+
+	a.screen.x = std::clamp(a.screen.x + dx * stepX, 0, gnScreenWidth - 1);
+	a.screen.y = std::clamp(a.screen.y + dy * stepY, 0, gnScreenHeight - 1);
 }
 
 } // namespace devilution

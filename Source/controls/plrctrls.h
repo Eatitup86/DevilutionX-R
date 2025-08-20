@@ -59,7 +59,17 @@ void InvalidateInventorySlot();
 void FocusOnInventory();
 void PerformSpellAction();
 void QuickCast(size_t slot);
+void GamepadAim(int dx, int dy);
+void SetPointAndClick(bool value);
+bool IsPointAndClick();
 
 extern int speedspellcount;
+
+struct AimState {
+	bool active = false;
+	Point screen { 0, 0 };
+};
+
+AimState &GetAimState();
 
 } // namespace devilution

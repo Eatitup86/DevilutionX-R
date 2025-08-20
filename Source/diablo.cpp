@@ -2030,6 +2030,46 @@ void InitKeymapActions()
 	    [] {
 		    ReorganizeInventory(*MyPlayer);
 	    });
+	options.Keymapper.AddAction(
+	    "AimUp",
+	    N_("Aim up"),
+	    N_("Move aim cursor up one tile."),
+	    SDLK_UNKNOWN,
+	    [] { GamepadAim(0, -1);
+			const auto &a = GetAimState();
+			SetCursorPos(a.screen);
+			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true); });
+	options.Keymapper.AddAction(
+	    "AimDown",
+	    N_("Aim down"),
+	    N_("Move aim cursor down one tile."),
+	    SDLK_UNKNOWN,
+	    [] { GamepadAim(0, +1);
+			const auto &a = GetAimState();
+			SetCursorPos(a.screen);
+			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true); });
+	options.Keymapper.AddAction(
+	    "AimLeft",
+	    N_("Aim left"),
+	    N_("Move aim cursor left one tile."),
+	    SDLK_UNKNOWN,
+	    [] { GamepadAim(-1, 0);
+			const auto &a = GetAimState();
+			SetCursorPos(a.screen);
+			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true); });
+	options.Keymapper.AddAction(
+	    "AimRight",
+	    N_("Aim right"),
+	    N_("Move aim cursor right one tile."),
+	    SDLK_UNKNOWN,
+	    [] { GamepadAim(+1, 0);
+			const auto &a = GetAimState();
+			SetCursorPos(a.screen);
+			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true); });
 #ifdef _DEBUG
 	options.Keymapper.AddAction(
 	    "OpenConsole",
@@ -2542,6 +2582,46 @@ void InitPadmapActions()
 	    [] {
 		    ToggleChatLog();
 	    });
+	options.Padmapper.AddAction(
+	    "AimUp",
+	    N_("Aim up"),
+	    N_("Move aim cursor up one tile."),
+	    ControllerButton_NONE,
+	    [] { GamepadAim(0, -1);
+			const auto &a = GetAimState();
+			SetCursorPos(a.screen);
+			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true); });
+	options.Padmapper.AddAction(
+	    "AimDown",
+	    N_("Aim down"),
+	    N_("Move aim cursor down one tile."),
+	    ControllerButton_NONE,
+	    [] { GamepadAim(0, +1);
+			const auto &a = GetAimState();
+			SetCursorPos(a.screen);
+			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true); });
+	options.Padmapper.AddAction(
+	    "AimLeft",
+	    N_("Aim left"),
+	    N_("Move aim cursor left one tile."),
+	    ControllerButton_NONE,
+	    [] { GamepadAim(-1, 0);
+			const auto &a = GetAimState();
+			SetCursorPos(a.screen);
+			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true); });
+	options.Padmapper.AddAction(
+	    "AimRight",
+	    N_("Aim right"),
+	    N_("Move aim cursor right one tile."),
+	    ControllerButton_NONE,
+	    [] { GamepadAim(+1, 0);
+			const auto &a = GetAimState();
+			SetCursorPos(a.screen);
+			ControlMode = ControlTypes::KeyboardAndMouse;
+			SetPointAndClick(true); });
 	options.Padmapper.CommitActions();
 }
 
