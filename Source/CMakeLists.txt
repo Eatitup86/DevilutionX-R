@@ -252,6 +252,14 @@ target_link_dependencies(libdevilutionx_padmapper PUBLIC
   libdevilutionx_options
 )
 
+add_devilutionx_object_library(libdevilutionx_palette_kd_tree
+  utils/palette_kd_tree.cpp
+)
+target_link_dependencies(libdevilutionx_palette_kd_tree PUBLIC
+  DevilutionX::SDL
+  libdevilutionx_strings
+)
+
 add_devilutionx_object_library(libdevilutionx_paths
   utils/paths.cpp
 )
@@ -545,7 +553,7 @@ add_devilutionx_object_library(libdevilutionx_palette_blending
 )
 target_link_dependencies(libdevilutionx_palette_blending PUBLIC
   DevilutionX::SDL
-  fmt::fmt
+  libdevilutionx_palette_kd_tree
   libdevilutionx_strings
 )
 
