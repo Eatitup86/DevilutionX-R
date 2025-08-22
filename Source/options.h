@@ -585,7 +585,7 @@ struct GameplayOptions : OptionCategoryBase {
 	/** @brief Displays item info in a floating box when hovering over an ite. */
 	OptionEntryBoolean floatingInfoBox;
 	/** @brief Automatically pick up gold when walking over it. */
-	OptionEntryBoolean autoGoldPickup;
+	OptionEntryInt<int> autoGoldPickup;
 	/** @brief Auto-pickup elixirs */
 	OptionEntryBoolean autoElixirPickup;
 	/** @brief Auto-pickup oils */

@@ -1455,10 +1455,19 @@ void StoreSellItem()
 			idx++;
 		}
 	}
-
-	AddGoldToInventory(myPlayer, cost);
-
-	myPlayer._pGold += cost;
+	// Add Gold to Stash Sell Item Logic
+	if (*GetOptions().Gameplay.autoGoldPickup == 2) {
+		if (Stash.gold > std::numeric_limits<int>::max() - cost) {
+			AddGoldToInventory(myPlayer, cost);
+			myPlayer._pGold += cost;
+		} else {
+			AddGoldToStash(myPlayer, cost, true);
+			// SendPlrMsg(*MyPlayer, "Sold " + iName + " for " + FormatInteger(cost) + " Gold");
+		}
+	} else {
+		AddGoldToInventory(myPlayer, cost);
+		myPlayer._pGold += cost;
+	}
 }
 
 void SmithSellEnter()

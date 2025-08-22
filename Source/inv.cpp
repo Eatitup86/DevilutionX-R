@@ -1535,14 +1535,36 @@ int AddGoldToInventory(Player &player, int value)
 	return value;
 }
 
+void AddGoldToStash(Player &player, int value, bool shop)
+{
+	PlaySFX(SfxID::ItemGold);
+	Stash.gold += (value);
+	Stash.dirty = true;
+}
+
 bool GoldAutoPlace(Player &player, Item &goldStack)
 {
-	goldStack._ivalue = AddGoldToInventory(player, goldStack._ivalue);
-	SetPlrHandGoldCurs(goldStack);
+	// Gold to Stash Logic.
+	if (*GetOptions().Gameplay.autoGoldPickup == 2) {
+		if (Stash.gold > std::numeric_limits<int>::max() - goldStack._ivalue) {
+			goldStack._ivalue = AddGoldToInventory(player, goldStack._ivalue);
+			SetPlrHandGoldCurs(goldStack);
 
-	player._pGold = CalculateGold(player);
+			player._pGold = CalculateGold(player);
+			return goldStack._ivalue == 0;
+		} else {
+			AddGoldToStash(player, goldStack._ivalue, 0);
+			return true;
+		}
+	} else {
+		goldStack._ivalue = AddGoldToInventory(player, goldStack._ivalue);
+		SetPlrHandGoldCurs(goldStack);
 
-	return goldStack._ivalue == 0;
+		player._pGold = CalculateGold(player);
+
+		return goldStack._ivalue == 0;
+	}
+	
 }
 
 void CheckInvSwap(Player &player, inv_body_loc bLoc)

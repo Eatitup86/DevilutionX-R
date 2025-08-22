@@ -24,6 +24,7 @@
 #include "utils/status_macros.hpp"
 #include "utils/str_cat.hpp"
 #include "utils/surface_to_clx.hpp"
+#include <qol/stash.h>
 
 namespace devilution {
 
@@ -167,9 +168,10 @@ PanelEntry panelEntries[] = {
 	        return StyledText { UiFlags::ColorRed, (InspectPlayer->_pStatPts > 0 ? StrCat(InspectPlayer->_pStatPts) : "") };
 	    } },
 
+	// Added Stash Gold to Count.
 	{ N_("Gold"), { TopRightLabelX, /* set dynamically */ 0 }, 0, 98, {} },
 	{ "", { TopRightLabelX, 127 }, 99, 0,
-	    []() { return StyledText { UiFlags::ColorWhite, FormatInteger(InspectPlayer->_pGold) }; } },
+	    []() { return StyledText { UiFlags::ColorWhite, FormatInteger(Stash.gold + InspectPlayer->_pGold) }; } },
 
 	{ N_("Armor class"), { RightColumnLabelX, 163 }, 57, RightColumnLabelWidth,
 	    []() { return StyledText { GetValueColor(InspectPlayer->_pIBonusAC), StrCat(InspectPlayer->GetArmor() + InspectPlayer->getCharacterLevel() * 2) }; } },

@@ -185,6 +185,7 @@ int RoomForGold();
  * @return The leftover amount that didn't fit, if any
  */
 int AddGoldToInventory(Player &player, int value);
+void AddGoldToStash(Player &player, int value, bool shop);
 bool GoldAutoPlace(Player &player, Item &goldStack);
 void CheckInvSwap(Player &player, inv_body_loc bLoc);
 void inv_update_rem_item(Player &player, inv_body_loc iv);
