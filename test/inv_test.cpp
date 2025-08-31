@@ -3,6 +3,7 @@
 #include "cursor.h"
 #include "engine/assets.hpp"
 #include "inv.h"
+#include "qol/stash.h"
 #include "player.h"
 #include "storm/storm_net.hpp"
 
@@ -144,6 +145,9 @@ TEST_F(InvTest, GoldAutoPlace)
 
 	// Empty the inventory
 	clear_inventory();
+
+	// Set stash to full.
+	Stash.gold = std::numeric_limits<int>::max();
 
 	// Put gold into the inventory:
 	// | 1000 | ... | ...
