@@ -187,6 +187,7 @@ int RoomForGold();
 int AddGoldToInventory(Player &player, int value);
 void AddGoldToStash(Player &player, int value, bool shop);
 bool GoldAutoPlace(Player &player, Item &goldStack);
+bool GoldInvPlace(Player &player, Item &goldStack);
 void CheckInvSwap(Player &player, inv_body_loc bLoc);
 void inv_update_rem_item(Player &player, inv_body_loc iv);
 void CheckInvSwap(Player &player, const Item &item, int invGridIndex);

@@ -4,6 +4,7 @@
 #include "engine/assets.hpp"
 #include "inv.h"
 #include "qol/stash.h"
+#include "options.h"
 #include "player.h"
 #include "storm/storm_net.hpp"
 
@@ -146,8 +147,7 @@ TEST_F(InvTest, GoldAutoPlace)
 	// Empty the inventory
 	clear_inventory();
 
-	// Set stash to full.
-	Stash.gold = std::numeric_limits<int>::max();
+	Player Myplayer;
 
 	// Put gold into the inventory:
 	// | 1000 | ... | ...
@@ -157,8 +157,8 @@ TEST_F(InvTest, GoldAutoPlace)
 	// Put (max gold - 100) gold, which is 4900, into the player's hand
 	MyPlayer->HoldItem._itype = ItemType::Gold;
 	MyPlayer->HoldItem._ivalue = GOLD_MAX_LIMIT - 100;
-
-	GoldAutoPlace(*MyPlayer, MyPlayer->HoldItem);
+	
+	GoldInvPlace(*MyPlayer, MyPlayer->HoldItem);
 	// We expect the inventory:
 	// | 5000 | 900 | ...
 	EXPECT_EQ(MyPlayer->InvList[0]._ivalue, GOLD_MAX_LIMIT);

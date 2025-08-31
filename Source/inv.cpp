@@ -1556,15 +1556,19 @@ bool GoldAutoPlace(Player &player, Item &goldStack)
 			AddGoldToStash(player, goldStack._ivalue, 0);
 			return true;
 		}
-	} else {
-		goldStack._ivalue = AddGoldToInventory(player, goldStack._ivalue);
-		SetPlrHandGoldCurs(goldStack);
+	} else
+		GoldInvPlace(player, goldStack);
+}
 
-		player._pGold = CalculateGold(player);
+bool GoldInvPlace(Player &player, Item &goldStack)
+{
+	// Original Gold Logic.
+	goldStack._ivalue = AddGoldToInventory(player, goldStack._ivalue);
+	SetPlrHandGoldCurs(goldStack);
 
-		return goldStack._ivalue == 0;
-	}
-	
+	player._pGold = CalculateGold(player);
+
+	return goldStack._ivalue == 0;
 }
 
 void CheckInvSwap(Player &player, inv_body_loc bLoc)
