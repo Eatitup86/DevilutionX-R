@@ -3,8 +3,6 @@
 #include "cursor.h"
 #include "engine/assets.hpp"
 #include "inv.h"
-#include "qol/stash.h"
-#include "options.h"
 #include "player.h"
 #include "storm/storm_net.hpp"
 
@@ -157,7 +155,7 @@ TEST_F(InvTest, GoldAutoPlace)
 	// Put (max gold - 100) gold, which is 4900, into the player's hand
 	MyPlayer->HoldItem._itype = ItemType::Gold;
 	MyPlayer->HoldItem._ivalue = GOLD_MAX_LIMIT - 100;
-	
+
 	GoldInvPlace(*MyPlayer, MyPlayer->HoldItem);
 	// We expect the inventory:
 	// | 5000 | 900 | ...
