@@ -1547,11 +1547,7 @@ bool GoldAutoPlace(Player &player, Item &goldStack)
 	// Gold to Stash Logic.
 	if (*GetOptions().Gameplay.autoGoldPickup == 2) {
 		if (Stash.gold > std::numeric_limits<int>::max() - goldStack._ivalue) {
-			goldStack._ivalue = AddGoldToInventory(player, goldStack._ivalue);
-			SetPlrHandGoldCurs(goldStack);
-
-			player._pGold = CalculateGold(player);
-			return goldStack._ivalue == 0;
+			GoldInvPlace(player, goldStack);
 		} else {
 			AddGoldToStash(player, goldStack._ivalue, 0);
 			return true;
